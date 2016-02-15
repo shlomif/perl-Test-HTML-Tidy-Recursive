@@ -2,6 +2,7 @@ package Test::HTML::Tidy::Recursive;
 
 use strict;
 use warnings;
+use 5.008;
 
 our $VERSION = '0.0.1';
 
