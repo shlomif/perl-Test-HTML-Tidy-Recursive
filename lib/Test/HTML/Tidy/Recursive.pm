@@ -99,6 +99,15 @@ Or with over-riding the defaults:
         targets => ['./dest-html', './dest-html-production'],
         })->run;
 
+=head1 DESCRIPTION
+
+This module acts as test module which runs L<HTML::Tidy> on some directory
+trees containing HTML/XHTML files and checks that they are all valid.
+
+It was extracted from a bunch of nearly duplicate test scripts in some of
+my (= Shlomi Fish) web sites, as an attempt to avoid duplicate code and
+functionality.
+
 =head1 METHODS
 
 =head2 calc_tidy
@@ -121,5 +130,9 @@ The method that runs the program.
 =head2 targets
 
 A parameter that accepts an array reference of targets as strings.
+
+=head1 SEE ALSO
+
+L<HTML::Tidy> .
 
 =cut
