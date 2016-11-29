@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use 5.008;
 
-our $VERSION = '0.0.2';
+our $VERSION = 'v0.0.2';
 
 use Test::More;
 
