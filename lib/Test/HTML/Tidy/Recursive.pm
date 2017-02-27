@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use 5.008;
 
-our $VERSION = 'v0.0.2';
+our $VERSION = 'v0.0.3';
 
 use Test::More;
 
@@ -64,6 +64,8 @@ sub run
                     $error_count++;
                     diag( $message->as_string);
                 }
+
+                $tidy->clear_messages();
             }
         }
     }
