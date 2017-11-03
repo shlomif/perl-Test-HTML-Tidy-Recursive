@@ -66,6 +66,34 @@ sub run
     return is ($self->_error_count, 0, "No errors");
 }
 
+sub check_using_tidy
+{
+    my ($self, $args) = @_;
+
+    my $fn = $args->{filename};
+
+    $self->_tidy->parse( $fn, (scalar io->file($fn)->slurp()));
+
+    for my $message ( $self->_tidy->messages ) {
+        $self->report_error({
+                message => scalar $message->as_string
+            });
+    }
+
+    $self->_tidy->clear_messages();
+
+    return;
+}
+
+sub check_file
+{
+    my ($self, $args) = @_;
+
+    $self->check_using_tidy($args);
+
+    return;
+}
+
 sub traverse
 {
     my ($self) = @_;
@@ -79,15 +107,7 @@ sub traverse
         {
             if ($filter->($fn))
             {
-                $self->_tidy->parse( $fn, (scalar io->file($fn)->slurp()));
-
-                for my $message ( $self->_tidy->messages ) {
-                    $self->report_error({
-                        message => scalar $message->as_string
-                    });
-                }
-
-                $self->_tidy->clear_messages();
+                $self->check_file({filename => $fn});
             }
         }
     }
@@ -149,6 +169,15 @@ or ".xhtml".
 =head2 run
 
 The method that runs the program.
+
+=head2 $obj->check_file({filename => $path_string})
+
+Override this method in subclasses to check a file in a different way.
+
+=head2 $obj->check_using_tidy({filename => $path_string})
+
+Actually check a file using tidy. Used by check_file() by default,
+but can also be called there in subclasses.
 
 =head2 $obj->report_error({message => $string});
 
