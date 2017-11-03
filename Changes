@@ -1,5 +1,10 @@
 Revision history for Test-HTML-Tidy-Recursive
 
+v0.2.0      2017-11-04
+    - Extract and document the methods: traverse, check_file, check_using_tidy,
+    and report_error - useful in subclassing.
+    - Convert dist.ini to the @SHLOMIF PluginBundle.
+
 v0.0.3      2017-02-27
     - Add a call to clear_messages() to avoid accumulating messages.
         - A non-security bug.
