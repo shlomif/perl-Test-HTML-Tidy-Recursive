@@ -1,4 +1,5 @@
 [PerlTidy]
 argv = -ci=4 -bl -cti=0
 ignore = **/{cmpdigest,valgrind,verify}--*.t
-select = **/*.{pl,pm,t}
+ignore = Test-HTML-Tidy-Recursive-*
+select = {lib,t}/*.{pl,pm,t}
