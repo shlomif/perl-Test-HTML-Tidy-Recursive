@@ -14,23 +14,31 @@ use IO::All qw/ io /;
 
 use MooX qw/ late /;
 
-has filename_re => (is => 'ro', default => sub {
+has filename_re => (
+    is      => 'ro',
+    default => sub {
         return qr/\.x?html\z/;
-    });
+    }
+);
 
-has targets => (is => 'ro', isa => 'ArrayRef', required => 1);
+has targets => ( is => 'ro', isa => 'ArrayRef', required => 1 );
 
-has filename_filter => (is => 'ro', default => sub { return sub { return 1; } });
+has filename_filter => (
+    is      => 'ro',
+    default => sub {
+        return sub { return 1; }
+    }
+);
 
-has _tidy => (is => 'rw');
-has _error_count => (is => 'rw', isa => 'Int', default => 0);
+has _tidy => ( is => 'rw' );
+has _error_count => ( is => 'rw', isa => 'Int', default => 0 );
 
 sub report_error
 {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
-    $self->_error_count(1 + $self->_error_count);
-    diag($args->{message});
+    $self->_error_count( 1 + $self->_error_count );
+    diag( $args->{message} );
 
     return;
 }
@@ -39,7 +47,7 @@ sub calc_tidy
 {
     my $self = shift;
 
-    my $tidy = HTML::Tidy->new({ output_xhtml => 1, });
+    my $tidy = HTML::Tidy->new( { output_xhtml => 1, } );
     $tidy->ignore( type => TIDY_WARNING, type => TIDY_INFO );
 
     return $tidy;
@@ -51,33 +59,36 @@ sub run
     plan tests => 1;
     local $SIG{__WARN__} = sub {
         my $w = shift;
-        if ($w !~ /\AUse of uninitialized/)
+        if ( $w !~ /\AUse of uninitialized/ )
         {
             die $w;
         }
         return;
     };
 
-    $self->_tidy($self->calc_tidy);
+    $self->_tidy( $self->calc_tidy );
     $self->traverse;
     $self->_tidy('NULL');
 
     # TEST
-    return is ($self->_error_count, 0, "No errors");
+    return is( $self->_error_count, 0, "No errors" );
 }
 
 sub check_using_tidy
 {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     my $fn = $args->{filename};
 
-    $self->_tidy->parse( $fn, (scalar io->file($fn)->slurp()));
+    $self->_tidy->parse( $fn, ( scalar io->file($fn)->slurp() ) );
 
-    for my $message ( $self->_tidy->messages ) {
-        $self->report_error({
+    for my $message ( $self->_tidy->messages )
+    {
+        $self->report_error(
+            {
                 message => scalar $message->as_string
-            });
+            }
+        );
     }
 
     $self->_tidy->clear_messages();
@@ -87,7 +98,7 @@ sub check_using_tidy
 
 sub check_file
 {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     $self->check_using_tidy($args);
 
@@ -99,15 +110,16 @@ sub traverse
     my ($self) = @_;
     $self->_error_count(0);
     my $filename_re = $self->filename_re;
-    my $filter = $self->filename_filter;
+    my $filter      = $self->filename_filter;
 
-    foreach my $target (@{$self->targets})
+    foreach my $target ( @{ $self->targets } )
     {
-        for my $fn (File::Find::Object::Rule->file()->name($filename_re)->in($target))
+        for my $fn (
+            File::Find::Object::Rule->file()->name($filename_re)->in($target) )
         {
-            if ($filter->($fn))
+            if ( $filter->($fn) )
             {
-                $self->check_file({filename => $fn});
+                $self->check_file( { filename => $fn } );
             }
         }
     }
