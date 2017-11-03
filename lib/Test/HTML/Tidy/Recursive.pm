@@ -59,7 +59,16 @@ sub run
     };
 
     $self->_tidy($self->calc_tidy);
+    $self->traverse;
+    $self->_tidy('NULL');
 
+    # TEST
+    return is ($self->_error_count, 0, "No errors");
+}
+
+sub traverse
+{
+    my ($self) = @_;
     $self->_error_count(0);
     my $filename_re = $self->filename_re;
     my $filter = $self->filename_filter;
@@ -83,10 +92,7 @@ sub run
         }
     }
 
-    $self->_tidy('NULL');
-
-    # TEST
-    is ($self->_error_count, 0, "No errors");
+    return;
 }
 
 1;
@@ -147,6 +153,11 @@ The method that runs the program.
 =head2 $obj->report_error({message => $string});
 
 Reports the error and increment the error count.
+
+=head2 $obj->traverse()
+
+The method that gets called by run() to do the actual traversal of the tree
+without actually checking for no errors. Useful for testing and debugging.
 
 =head2 targets
 
