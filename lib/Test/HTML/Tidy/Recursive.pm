@@ -23,6 +23,17 @@ has targets => (is => 'ro', isa => 'ArrayRef', required => 1);
 has filename_filter => (is => 'ro', default => sub { return sub { return 1; } });
 
 has _tidy => (is => 'rw');
+has _error_count => (is => 'rw', isa => 'Int', default => 0);
+
+sub report_error
+{
+    my ($self, $args) = @_;
+
+    $self->_error_count(1 + $self->_error_count);
+    diag($args->{message});
+
+    return;
+}
 
 sub calc_tidy
 {
@@ -49,8 +60,7 @@ sub run
 
     $self->_tidy($self->calc_tidy);
 
-    my $error_count = 0;
-
+    $self->_error_count(0);
     my $filename_re = $self->filename_re;
     my $filter = $self->filename_filter;
 
@@ -63,8 +73,9 @@ sub run
                 $self->_tidy->parse( $fn, (scalar io->file($fn)->slurp()));
 
                 for my $message ( $self->_tidy->messages ) {
-                    $error_count++;
-                    diag( $message->as_string);
+                    $self->report_error({
+                        message => scalar $message->as_string
+                    });
                 }
 
                 $self->_tidy->clear_messages();
@@ -75,7 +86,7 @@ sub run
     $self->_tidy('NULL');
 
     # TEST
-    is ($error_count, 0, "No errors");
+    is ($self->_error_count, 0, "No errors");
 }
 
 1;
@@ -132,6 +143,10 @@ or ".xhtml".
 =head2 run
 
 The method that runs the program.
+
+=head2 $obj->report_error({message => $string});
+
+Reports the error and increment the error count.
 
 =head2 targets
 
