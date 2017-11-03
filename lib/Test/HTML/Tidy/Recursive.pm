@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use 5.008;
 
-our $VERSION = 'v0.0.3';
-
 use Test::More;
 
 use HTML::Tidy;

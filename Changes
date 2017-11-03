@@ -1,5 +1,8 @@
 Revision history for Test-HTML-Tidy-Recursive
 
+0.2.1       2017-11-04
+    - Update the $VERSION inside the .pm file.
+
 0.2.0       2017-11-04
     - Extract and document the methods: traverse, check_file, check_using_tidy,
     and report_error - useful in subclassing.
