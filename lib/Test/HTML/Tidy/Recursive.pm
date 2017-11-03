@@ -22,6 +22,8 @@ has targets => (is => 'ro', isa => 'ArrayRef', required => 1);
 
 has filename_filter => (is => 'ro', default => sub { return sub { return 1; } });
 
+has _tidy => (is => 'rw');
+
 sub calc_tidy
 {
     my $self = shift;
@@ -45,7 +47,7 @@ sub run
         return;
     };
 
-    my $tidy = $self->calc_tidy;
+    $self->_tidy($self->calc_tidy);
 
     my $error_count = 0;
 
@@ -58,17 +60,19 @@ sub run
         {
             if ($filter->($fn))
             {
-                $tidy->parse( $fn, (scalar io->file($fn)->slurp()));
+                $self->_tidy->parse( $fn, (scalar io->file($fn)->slurp()));
 
-                for my $message ( $tidy->messages ) {
+                for my $message ( $self->_tidy->messages ) {
                     $error_count++;
                     diag( $message->as_string);
                 }
 
-                $tidy->clear_messages();
+                $self->_tidy->clear_messages();
             }
         }
     }
+
+    $self->_tidy('NULL');
 
     # TEST
     is ($error_count, 0, "No errors");
