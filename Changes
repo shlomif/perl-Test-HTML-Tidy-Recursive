@@ -1,5 +1,8 @@
 Revision history for Test-HTML-Tidy-Recursive
 
+0.4.0       2017-11-30
+    - Add the ::Strict subclass module.
+
 0.2.1       2017-11-04
     - Update the $VERSION inside the .pm file.
 
