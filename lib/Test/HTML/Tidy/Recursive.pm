@@ -6,8 +6,8 @@ use 5.008;
 
 use Test::More;
 
-use HTML::Tidy;
-use File::Find::Object::Rule;
+use HTML::T5;
+use File::Find::Object::Rule ();
 use IO::All qw/ io /;
 
 use MooX qw/ late /;
@@ -28,7 +28,7 @@ has filename_filter => (
     }
 );
 
-has _tidy => ( is => 'rw' );
+has _tidy        => ( is => 'rw' );
 has _error_count => ( is => 'rw', isa => 'Int', default => 0 );
 
 sub report_error
@@ -45,7 +45,7 @@ sub calc_tidy
 {
     my $self = shift;
 
-    my $tidy = HTML::Tidy->new( { output_xhtml => 1, } );
+    my $tidy = HTML::T5->new( { output_xhtml => 1, } );
     $tidy->ignore( type => TIDY_WARNING, type => TIDY_INFO );
 
     return $tidy;
@@ -132,7 +132,7 @@ __END__
 =head1 NAME
 
 Test::HTML::Tidy::Recursive - recursively check files in a directory using
-HTML::Tidy .
+HTML::T5 .
 
 =head1 SYNOPSIS
 
@@ -154,7 +154,7 @@ Or with over-riding the defaults:
 
 =head1 DESCRIPTION
 
-This module acts as test module which runs L<HTML::Tidy> on some directory
+This module acts as test module which runs L<HTML::T5> on some directory
 trees containing HTML/XHTML files and checks that they are all valid.
 
 It was extracted from a bunch of nearly duplicate test scripts in some of
@@ -165,7 +165,7 @@ functionality.
 
 =head2 calc_tidy
 
-Calculates the L<HTML::Tidy> object - can be overriden.
+Calculates the L<HTML::T5> object - can be overriden.
 
 =head2 filename_filter
 
@@ -204,6 +204,6 @@ A parameter that accepts an array reference of targets as strings.
 
 =head1 SEE ALSO
 
-L<HTML::Tidy> .
+L<HTML::T5> .
 
 =cut

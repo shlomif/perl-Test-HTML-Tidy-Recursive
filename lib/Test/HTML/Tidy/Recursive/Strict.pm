@@ -1,6 +1,7 @@
 package Test::HTML::Tidy::Recursive::Strict;
 
 use MooX qw/ late /;
+use HTML::T5 ();
 
 extends('Test::HTML::Tidy::Recursive');
 
@@ -8,7 +9,7 @@ sub calc_tidy
 {
     my $self = shift;
 
-    return HTML::Tidy->new( { output_xhtml => 1, } );
+    return HTML::T5->new( { output_xhtml => 1, } );
 }
 
 1;
@@ -18,7 +19,7 @@ __END__
 =head1 NAME
 
 Test::HTML::Tidy::Recursive::Strict - recursively check files in a directory
-using HTML::Tidy while not ignoring warnings.
+using HTML::T5 while not ignoring warnings.
 
 =head1 SYNOPSIS
 
@@ -31,17 +32,17 @@ using HTML::Tidy while not ignoring warnings.
 =head1 DESCRIPTION
 
 This is a subclass of L<Test::HTML::Tidy::Recursive> that uses a stricter
-configuration of L<HTML::Tidy> with no warnings ignored. Refer to the
+configuration of L<HTML::T5> with no warnings ignored. Refer to the
 L<Test::HTML::Tidy::Recursive> documentation for more usage information.
 
 =head1 METHODS
 
 =head2 calc_tidy
 
-Calculates the L<HTML::Tidy> object.
+Calculates the L<HTML::T5> object.
 
 =head1 SEE ALSO
 
-L<HTML::Tidy> , L<Test::HTML::Tidy::Recursive> .
+L<HTML::T5> , L<Test::HTML::Tidy::Recursive> .
 
 =cut

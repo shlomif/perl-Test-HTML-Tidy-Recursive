@@ -1,5 +1,9 @@
 Revision history for Test-HTML-Tidy-Recursive
 
+0.6.0       2019-03-14
+    - Convert from HTML::Tidy to HTML::T5.
+        - HTML::Tidy is hard to install.
+
 0.4.0       2017-11-30
     - Add the ::Strict subclass module.
 
