@@ -1,5 +1,9 @@
 package Test::HTML::Tidy::Recursive::Strict;
 
+use strict;
+use warnings;
+use autodie;
+
 use MooX qw/ late /;
 use HTML::T5 ();
 

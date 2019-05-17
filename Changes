@@ -1,5 +1,8 @@
 Revision history for Test-HTML-Tidy-Recursive
 
+0.6.1       2019-05-17
+    - Add "use strict" (Kwalitee).
+
 0.6.0       2019-03-14
     - Convert from HTML::Tidy to HTML::T5.
         - HTML::Tidy is hard to install.
