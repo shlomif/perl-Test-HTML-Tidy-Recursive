@@ -6,9 +6,9 @@ use 5.008;
 
 use Test::More;
 
-use HTML::T5;
-use File::Find::Object::Rule ();
-use IO::All qw/ io /;
+use HTML::T5 qw/ TIDY_INFO TIDY_WARNING /;
+use File::Find::Object ();
+use Path::Tiny qw/ path /;
 
 use MooX qw/ late /;
 
@@ -78,7 +78,7 @@ sub check_using_tidy
 
     my $fn = $args->{filename};
 
-    $self->_tidy->parse( $fn, ( scalar io->file($fn)->slurp() ) );
+    $self->_tidy->parse( $fn, ( path($fn)->slurp_raw() ) );
 
     for my $message ( $self->_tidy->messages )
     {
@@ -112,10 +112,15 @@ sub traverse
 
     foreach my $target ( @{ $self->targets } )
     {
-        for my $fn (
-            File::Find::Object::Rule->file()->name($filename_re)->in($target) )
+        my $ffo = File::Find::Object->new( {}, $target );
+        while ( my $item = $ffo->next_obj() )
         {
-            if ( $filter->($fn) )
+            my $fn = $item->path();
+            if ( not $filter->($fn) )
+            {
+                $ffo->prune;
+            }
+            elsif ( $item->is_file() and $fn =~ $filename_re )
             {
                 $self->check_file( { filename => $fn } );
             }
